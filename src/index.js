@@ -47,16 +47,18 @@ const RouterControllerProvider = (props) => {
     type = RouterType.Hash,
     modles = [],
     state = {},
+    reducers = {},
     middleware = [],
     ...ops
   } = props;
 
   const initialState = state;
   const initialReducer = {
-    routing
+    ...reducers,
+    routing,
   };
   const history = getHistoryByType(type, ops);
-  const initialMiddleware = [routerMiddleware(history)];
+  const initialMiddleware = [routerMiddleware(history),...middleware];
   const initialModles = modles;
   const modelManager = sagaModelManagerFactory({initialState, initialReducer, initialMiddleware, initialModles});
 

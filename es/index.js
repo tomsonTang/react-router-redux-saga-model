@@ -1,5 +1,7 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 import React from "react";
@@ -56,16 +58,18 @@ var RouterControllerProvider = function RouterControllerProvider(props) {
       modles = _props$modles === undefined ? [] : _props$modles,
       _props$state = props.state,
       state = _props$state === undefined ? {} : _props$state,
+      _props$reducers = props.reducers,
+      reducers = _props$reducers === undefined ? {} : _props$reducers,
       _props$middleware = props.middleware,
       middleware = _props$middleware === undefined ? [] : _props$middleware,
-      ops = _objectWithoutProperties(props, ["children", "type", "modles", "state", "middleware"]);
+      ops = _objectWithoutProperties(props, ["children", "type", "modles", "state", "reducers", "middleware"]);
 
   var initialState = state;
-  var initialReducer = {
+  var initialReducer = _extends({}, reducers, {
     routing: routing
-  };
+  });
   var history = getHistoryByType(type, ops);
-  var initialMiddleware = [routerMiddleware(history)];
+  var initialMiddleware = [routerMiddleware(history)].concat(_toConsumableArray(middleware));
   var initialModles = modles;
   var modelManager = sagaModelManagerFactory({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModles: initialModles });
 

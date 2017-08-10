@@ -31,6 +31,8 @@ var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 var RouterType = {
@@ -79,16 +81,18 @@ var RouterControllerProvider = function RouterControllerProvider(props) {
       modles = _props$modles === undefined ? [] : _props$modles,
       _props$state = props.state,
       state = _props$state === undefined ? {} : _props$state,
+      _props$reducers = props.reducers,
+      reducers = _props$reducers === undefined ? {} : _props$reducers,
       _props$middleware = props.middleware,
       middleware = _props$middleware === undefined ? [] : _props$middleware,
-      ops = _objectWithoutProperties(props, ["children", "type", "modles", "state", "middleware"]);
+      ops = _objectWithoutProperties(props, ["children", "type", "modles", "state", "reducers", "middleware"]);
 
   var initialState = state;
-  var initialReducer = {
+  var initialReducer = _extends({}, reducers, {
     routing: _reactRouterRedux.routerReducer
-  };
+  });
   var history = getHistoryByType(type, ops);
-  var initialMiddleware = [(0, _reactRouterRedux.routerMiddleware)(history)];
+  var initialMiddleware = [(0, _reactRouterRedux.routerMiddleware)(history)].concat(_toConsumableArray(middleware));
   var initialModles = modles;
   var modelManager = (0, _reduxSagaModel.sagaModelManagerFactory)({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModles: initialModles });
 
