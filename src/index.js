@@ -30,7 +30,7 @@ function getHistoryByType(type, props) {
 // see
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-route
 // r-redux
-function RouterController({children, history}) {
+function BindRouter({children, history}) {
   return (
     <ConnectedRouter history={history}>
       {children}
@@ -42,7 +42,7 @@ const needChildren = () => {
   throw new Error('RouterControllerProvider \'children can not be null or undefined ');
 }
 
-function RouterControllerProvider(props) {
+function RouterProvider(props) {
 
   const {
     children = needChildren(),
@@ -68,30 +68,30 @@ function RouterControllerProvider(props) {
 
   return (
     <Provider store={modelManager.getStore()}>
-      <RouterController children={children} history={history}/>
+      <BindRouter children={children} history={history}/>
     </Provider>
   );
 };
 
-function BrowserRouterControllerProvider(props) {
-  return <RouterControllerProvider {...props} type={RouterType.Browser}/>;
+function BrowserRouterProvider(props) {
+  return <RouterProvider {...props} type={RouterType.Browser}/>;
 };
 
-function HashRouterControllerProvider(props) {
-  return <RouterControllerProvider {...props} type={RouterType.Hash}/>;
+function HashRouterProvider(props) {
+  return <RouterProvider {...props} type={RouterType.Hash}/>;
 };
 
-function MemoryRouterControllerProvider(props) {
-  return <RouterControllerProvider {...props} type={RouterType.Memory}/>;
+function MemoryRouterProvider(props) {
+  return <RouterProvider {...props} type={RouterType.Memory}/>;
 };
 
 export {
   RouterType,
-  RouterController,
-  RouterControllerProvider,
-  BrowserRouterControllerProvider,
-  HashRouterControllerProvider,
-  MemoryRouterControllerProvider
+  BindRouter,
+  RouterProvider,
+  BrowserRouterProvider,
+  HashRouterProvider,
+  MemoryRouterProvider
 };
 
-export default HashRouterControllerProvider;
+export default HashRouterProvider;

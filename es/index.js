@@ -36,7 +36,7 @@ function getHistoryByType(type, props) {
 // see
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-route
 // r-redux
-function RouterController(_ref) {
+function BindRouter(_ref) {
   var children = _ref.children,
       history = _ref.history;
 
@@ -51,7 +51,7 @@ var needChildren = function needChildren() {
   throw new Error('RouterControllerProvider \'children can not be null or undefined ');
 };
 
-function RouterControllerProvider(props) {
+function RouterProvider(props) {
   var _props$children = props.children,
       children = _props$children === undefined ? needChildren() : _props$children,
       _props$type = props.type,
@@ -78,22 +78,22 @@ function RouterControllerProvider(props) {
   return React.createElement(
     Provider,
     { store: modelManager.getStore() },
-    React.createElement(RouterController, { children: children, history: history })
+    React.createElement(BindRouter, { children: children, history: history })
   );
 };
 
-function BrowserRouterControllerProvider(props) {
-  return React.createElement(RouterControllerProvider, _extends({}, props, { type: RouterType.Browser }));
+function BrowserRouterProvider(props) {
+  return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Browser }));
 };
 
-function HashRouterControllerProvider(props) {
-  return React.createElement(RouterControllerProvider, _extends({}, props, { type: RouterType.Hash }));
+function HashRouterProvider(props) {
+  return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Hash }));
 };
 
-function MemoryRouterControllerProvider(props) {
-  return React.createElement(RouterControllerProvider, _extends({}, props, { type: RouterType.Memory }));
+function MemoryRouterProvider(props) {
+  return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Memory }));
 };
 
-export { RouterType, RouterController, RouterControllerProvider, BrowserRouterControllerProvider, HashRouterControllerProvider, MemoryRouterControllerProvider };
+export { RouterType, BindRouter, RouterProvider, BrowserRouterProvider, HashRouterProvider, MemoryRouterProvider };
 
-export default HashRouterControllerProvider;
+export default HashRouterProvider;

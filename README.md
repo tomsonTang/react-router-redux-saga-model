@@ -8,17 +8,17 @@
 这里将其透明化：
 
 ```jsx
-import {BrowserRouterControllerProvider} from 'react-router-redux-saga-model'
+import {BrowserRouterProvider} from 'react-router-redux-saga-model'
 
 ReactDOM.render(
-  <BrowserRouterControllerProvider>
+  <BrowserRouterProvider>
     <div>
         <Link to="/about">关于</Link>
         <Link to="/">主页</Link>
         <Route exact path="/" component={Index}/>
         <Route path="/about" component={About}/>
     </div>
-  </BrowserRouterControllerProvider>,
+  </BrowserRouterProvider>,
   document.querySelector('#root')
 )
 ```
@@ -41,9 +41,9 @@ ReactDOM.render(
 
 ## 基本 API
 
-- BrowserRouterControllerProvider
-- HashRouterControllerProvider
-- MemoryRouterControllerProvider
+- BrowserRouterProvider
+- HashRouterProvider
+- MemoryRouterProvider
 
 ## 高级 API
 
@@ -54,42 +54,42 @@ ReactDOM.render(
   `RouterType.Memory`
 
 
-- RouterControllerProvider
+- RouterProvider
 
   有时候我们有特殊需要需要设置 默认的 state，middleware，reducer（由于使用了 sagaModel，正常是不需要提供额外的 reducer）
 
   ```jsx
-  import {RouterControllerProvider,RouterType} from 'react-router-redux-saga-model';
+  import {RouterProvider,RouterType} from 'react-router-redux-saga-model';
 
   const initialState = {};
   const initialReducer = {};
   const initialMiddleware = [];
 
-  <RouterControllerProvider type={RouterType.Browser} state={initialState} reducers={initialReducer} middleware={initialMiddleware}>
+  <RouterProvider type={RouterType.Browser} state={initialState} reducers={initialReducer} middleware={initialMiddleware}>
     <div>
         <Link to="/about">关于</Link>
         <Link to="/">主页</Link>
         <Route exact path="/" component={Index}/>
         <Route path="/about" component={About}/>
     </div>
-  </RouterControllerProvider>
+  </RouterProvider>
   ```
 
 ## 与 sagaModel 配合使用 
 
 ```jsx
-import {BrowserRouterControllerProvider} from 'react-router-redux-saga-model'
+import {BrowserRouterProvider} from 'react-router-redux-saga-model'
 import modles from 'somewhere'
 
 ReactDOM.render(
-  <BrowserRouterControllerProvider modles={modles}>
+  <BrowserRouterProvider modles={modles}>
     <div>
         <Link to="/about">关于</Link>
         <Link to="/">主页</Link>
         <Route exact path="/" component={Index}/>
         <Route path="/about" component={About}/>
     </div>
-  </BrowserRouterControllerProvider>,
+  </BrowserRouterProvider>,
   document.querySelector('#root')
 )
 ```
