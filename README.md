@@ -24,9 +24,9 @@ ReactDOM.render(
 ```
 
 ```jsx
-/* 实际输出 */
-<Provider store={store}>
-   <ConnectedRouter history={history}>
+/* 输出 */
+<Provider store={createStore()}>
+   <ConnectedRouter history={createBrowserHistory()}>
    	<div>
        <Link to="/about">关于</Link>
        <Link to="/">主页</Link>
@@ -39,5 +39,62 @@ ReactDOM.render(
 
 
 
-## API
+## 基本 API
+
+- BrowserRouterControllerProvider
+- HashRouterControllerProvider
+- MemoryRouterControllerProvider
+
+## 高级 API
+
+- RouterType 对应 [`history`](https://github.com/ReactTraining/history) 的 3 中 history 类型：
+
+  `RouterType.Browser` 
+  `RouterType.Hash`
+  `RouterType.Memory`
+
+
+- RouterControllerProvider
+
+  有时候我们有特殊需要需要设置 默认的 state，middleware，reducer（由于使用了 sagaModel，正常是不需要提供额外的 reducer）
+
+  ```jsx
+  import {RouterControllerProvider,RouterType} from 'react-router-redux-saga-model';
+
+  const initialState = {};
+  const initialReducer = {};
+  const initialMiddleware = [];
+
+  <RouterControllerProvider type={RouterType.Browser} state={initialState} reducers={initialReducer} middleware={initialMiddleware}>
+    <div>
+        <Link to="/about">关于</Link>
+        <Link to="/">主页</Link>
+        <Route exact path="/" component={Index}/>
+        <Route path="/about" component={About}/>
+    </div>
+  </RouterControllerProvider>
+  ```
+
+## 与 sagaModel 配合使用 
+
+```jsx
+import {BrowserRouterControllerProvider} from 'react-router-redux-saga-model'
+import modles from 'somewhere'
+
+ReactDOM.render(
+  <BrowserRouterControllerProvider modles={modles}>
+    <div>
+        <Link to="/about">关于</Link>
+        <Link to="/">主页</Link>
+        <Route exact path="/" component={Index}/>
+        <Route path="/about" component={About}/>
+    </div>
+  </BrowserRouterControllerProvider>,
+  document.querySelector('#root')
+)
+```
+
+这时候所有的 sagaModels 都会被解析并处理。
+
+## 例子
 
