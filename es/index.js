@@ -19,7 +19,7 @@ var RouterType = {
 };
 
 // see https://github.com/ReactTraining/history
-var getHistoryByType = function getHistoryByType(type, props) {
+function getHistoryByType(type, props) {
   switch (type) {
     case RouterType.Browser:
       return createBrowserHistory({ basename: props.basename, forceRefresh: props.forceRefresh, keyLength: props.keyLength, getUserConfirmation: props.getUserConfirmation });
@@ -33,8 +33,10 @@ var getHistoryByType = function getHistoryByType(type, props) {
   }
 };
 
-// see https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
-var RouterController = function RouterController(_ref) {
+// see
+// https://github.com/ReactTraining/react-router/tree/master/packages/react-route
+// r-redux
+function RouterController(_ref) {
   var children = _ref.children,
       history = _ref.history;
 
@@ -49,7 +51,7 @@ var needChildren = function needChildren() {
   throw new Error('RouterControllerProvider \'children can not be null or undefined ');
 };
 
-var RouterControllerProvider = function RouterControllerProvider(props) {
+function RouterControllerProvider(props) {
   var _props$children = props.children,
       children = _props$children === undefined ? needChildren() : _props$children,
       _props$type = props.type,
@@ -80,15 +82,15 @@ var RouterControllerProvider = function RouterControllerProvider(props) {
   );
 };
 
-var BrowserRouterControllerProvider = function BrowserRouterControllerProvider(props) {
+function BrowserRouterControllerProvider(props) {
   return React.createElement(RouterControllerProvider, _extends({}, props, { type: RouterType.Browser }));
 };
 
-var HashRouterControllerProvider = function HashRouterControllerProvider(props) {
+function HashRouterControllerProvider(props) {
   return React.createElement(RouterControllerProvider, _extends({}, props, { type: RouterType.Hash }));
 };
 
-var MemoryRouterControllerProvider = function MemoryRouterControllerProvider(props) {
+function MemoryRouterControllerProvider(props) {
   return React.createElement(RouterControllerProvider, _extends({}, props, { type: RouterType.Memory }));
 };
 

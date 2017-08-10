@@ -13,7 +13,7 @@ const RouterType = {
 };
 
 // see https://github.com/ReactTraining/history
-const getHistoryByType = (type, props) => {
+function getHistoryByType(type, props) {
   switch (type) {
     case RouterType.Browser:
       return createBrowserHistory({basename: props.basename, forceRefresh: props.forceRefresh, keyLength: props.keyLength, getUserConfirmation: props.getUserConfirmation});
@@ -27,8 +27,10 @@ const getHistoryByType = (type, props) => {
   }
 };
 
-// see https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
-const RouterController = ({children, history}) => {
+// see
+// https://github.com/ReactTraining/react-router/tree/master/packages/react-route
+// r-redux
+function RouterController({children, history}) {
   return (
     <ConnectedRouter history={history}>
       {children}
@@ -36,11 +38,11 @@ const RouterController = ({children, history}) => {
   );
 };
 
-const needChildren = ()=>{
+const needChildren = () => {
   throw new Error('RouterControllerProvider \'children can not be null or undefined ');
 }
 
-const RouterControllerProvider = (props) => {
+function RouterControllerProvider(props) {
 
   const {
     children = needChildren(),
@@ -55,10 +57,12 @@ const RouterControllerProvider = (props) => {
   const initialState = state;
   const initialReducer = {
     ...reducers,
-    routing,
+    routing
   };
   const history = getHistoryByType(type, ops);
-  const initialMiddleware = [routerMiddleware(history),...middleware];
+  const initialMiddleware = [
+    routerMiddleware(history), ...middleware
+  ];
   const initialModles = modles;
   const modelManager = sagaModelManagerFactory({initialState, initialReducer, initialMiddleware, initialModles});
 
@@ -69,15 +73,15 @@ const RouterControllerProvider = (props) => {
   );
 };
 
-const BrowserRouterControllerProvider = props => {
+function BrowserRouterControllerProvider(props) {
   return <RouterControllerProvider {...props} type={RouterType.Browser}/>;
 };
 
-const HashRouterControllerProvider = props => {
+function HashRouterControllerProvider(props) {
   return <RouterControllerProvider {...props} type={RouterType.Hash}/>;
 };
 
-const MemoryRouterControllerProvider = props => {
+function MemoryRouterControllerProvider(props) {
   return <RouterControllerProvider {...props} type={RouterType.Memory}/>;
 };
 
