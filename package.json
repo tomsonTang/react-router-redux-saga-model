@@ -1,11 +1,13 @@
 {
   "name": "react-router-redux-saga-model",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "main": "lib/index.js",
   "author": "tangzixiang <tomson_tang@yeah.net>",
   "license": "MIT",
   "dependencies": {
+    "dva-loading": "^0.2.1",
     "history": "^4.6.3",
+    "invariant": "^2.2.2",
     "react": "^15.6.1",
     "react-redux": "^5.0.6",
     "react-router-redux": "next",

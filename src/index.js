@@ -5,6 +5,7 @@ import {ConnectedRouter, routerMiddleware, routerReducer as routing} from "react
 import createBrowserHistory from "history/createBrowserHistory";
 import createHashHistory from "history/createHashHistory";
 import createMemoryHistory from "history/createMemoryHistory";
+import invariant from 'invariant';
 
 const RouterType = {
   Browser: "browser",
@@ -30,24 +31,22 @@ function getHistoryByType(type, props) {
 // see
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-route
 // r-redux
-function BindRouter({children, history}) {
+function BindRouter({children, history,sagaModel}) {
   return (
     <ConnectedRouter history={history}>
-      {children}
+      { typeof children === 'function' ? children(sagaModel) : children }
     </ConnectedRouter>
   );
 };
 
-const needChildren = () => {
-  throw new Error('RouterControllerProvider \'children can not be null or undefined ');
-}
-
 function RouterProvider(props) {
 
+  invariant(!props.children,'RouterProvider: children should be defined');
+
   const {
-    children = needChildren(),
+    children,
     type = RouterType.Hash,
-    modles = [],
+    models = [],
     state = {},
     reducers = {},
     middleware = [],
@@ -63,25 +62,28 @@ function RouterProvider(props) {
   const initialMiddleware = [
     routerMiddleware(history), ...middleware
   ];
-  const initialModles = modles;
-  const modelManager = sagaModelManagerFactory({initialState, initialReducer, initialMiddleware, initialModles});
+  const initialModels = models;
+  const modelManager = sagaModelManagerFactory({initialState, initialReducer, initialMiddleware, initialModels,history});
 
   return (
     <Provider store={modelManager.getStore()}>
-      <BindRouter children={children} history={history}/>
+      <BindRouter children={children} history={history} sagaModel={modelManager}/>
     </Provider>
   );
 };
 
 function BrowserRouterProvider(props) {
+  invariant(props !== null && typeof props == 'object','BrowserRouterProvider: props should be defined');
   return <RouterProvider {...props} type={RouterType.Browser}/>;
 };
 
 function HashRouterProvider(props) {
+  invariant(props !== null && typeof props == 'object','HashRouterProvider: props should be defined');
   return <RouterProvider {...props} type={RouterType.Hash}/>;
 };
 
 function MemoryRouterProvider(props) {
+  invariant(props !== null && typeof props == 'object','MemoryRouterProvider: props should be defined');
   return <RouterProvider {...props} type={RouterType.Memory}/>;
 };
 

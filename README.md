@@ -79,10 +79,10 @@ ReactDOM.render(
 
 ```jsx
 import {BrowserRouterProvider} from 'react-router-redux-saga-model'
-import modles from 'somewhere'
+import models from 'somewhere'
 
 ReactDOM.render(
-  <BrowserRouterProvider modles={modles}>
+  <BrowserRouterProvider models={models}>
     <div>
         <Link to="/about">关于</Link>
         <Link to="/">主页</Link>
