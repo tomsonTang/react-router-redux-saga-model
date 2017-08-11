@@ -50,6 +50,7 @@ function RouterProvider(props) {
     state = {},
     reducers = {},
     middleware = [],
+    plugins =[],
     ...ops
   } = props;
 
@@ -64,6 +65,8 @@ function RouterProvider(props) {
   ];
   const initialModels = models;
   const modelManager = new SagaModelManager({initialState, initialReducer, initialMiddleware, initialModels,history});
+
+  plugins.forEach(::modelManager.use);
 
   return (
     <Provider store={modelManager.store()}>

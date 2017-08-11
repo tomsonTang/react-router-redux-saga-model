@@ -1,10 +1,11 @@
 {
   "name": "react-router-redux-saga-model",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "main": "lib/index.js",
   "author": "tangzixiang <tomson_tang@yeah.net>",
   "license": "MIT",
   "dependencies": {
+    "babel-plugin-syntax-function-bind": "^6.13.0",
     "dva-loading": "^0.2.1",
     "history": "^4.6.3",
     "invariant": "^2.2.2",
