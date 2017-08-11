@@ -1,5 +1,5 @@
 # react-router-redux-saga-model
-将 react-router 、redux、与 redux-saga-model 进行封装
+将 react-router 、redux、与 [redux-saga-model](https://github.com/tomsonTang/redux-saga-model) 进行封装
 
 `npm i react-router-redux-saga-model`
 
@@ -77,12 +77,16 @@ ReactDOM.render(
 
 ## 与 sagaModel 配合使用 
 
+### 方式一
+
 ```jsx
 import {BrowserRouterProvider} from 'react-router-redux-saga-model'
-import models from 'somewhere'
+import indexModel from './view/index/indexModel.js';
+
+const models = [indexModel];
 
 ReactDOM.render(
-  <BrowserRouterProvider models={models}>
+  <BrowserRouterProvider modles={models}>
     <div>
         <Link to="/about">关于</Link>
         <Link to="/">主页</Link>
@@ -96,9 +100,45 @@ ReactDOM.render(
 
 这时候所有的 sagaModels 都会被解析并处理。
 
-## 例子
+### 方式二
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Route} from 'react-router';
+import {Link} from 'react-router-dom';
+import {BrowserRouterProvider} from 'react-router-redux-saga-model'
+import About from './view/about/index.jsx';
+import Index from './view/index/index.jsx';
+import loading from './plugins/loading.js';
+import indexModel from './view/index/indexModel.js';
+
+const App = (sagaModel) =>{
+  // sagaModel API
+  sagaModel.register(IndexModel);
+
+  return (
+    <div>
+        <Link to="/about">关于</Link>
+        <Link to="/">主页</Link>
+        <Route exact path="/" component={Index}/>
+        <Route path="/about" component={About}/>
+    </div>
+  )
+};
+
+ReactDOM.render(
+  <BrowserRouterProvider children={App} plugins={[loading]}/>,
+  document.querySelector('#root')
+);
+```
+
+通过传入一个回调，拿到 sagaModel 动态设置相关处理。
+
+## 详细例子
 
 [ react-router-redux-saga-model ](https://github.com/tomsonTang/react-router-redux-saga-model-example)
 
 1. `npm install `
 2. `npm start`
+
