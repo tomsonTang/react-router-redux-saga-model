@@ -1,6 +1,6 @@
 {
   "name": "react-router-redux-saga-model",
-  "version": "0.0.46",
+  "version": "0.0.6",
   "main": "lib/index.js",
   "author": "tangzixiang <tomson_tang@yeah.net>",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "react-redux": "^5.0.6",
     "react-router-redux": "next",
     "redux": "^3.7.2",
-    "redux-saga-model": "^0.0.94"
+    "redux-saga-model": "^0.1.0"
   },
   "scripts": {
     "build": "npm run build-es && npm run build-default",

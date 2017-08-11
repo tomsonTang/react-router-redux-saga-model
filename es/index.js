@@ -1,3 +1,5 @@
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -6,11 +8,12 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 import React from "react";
 import { Provider } from "react-redux";
-import { sagaModelManagerFactory } from "redux-saga-model";
+import { SagaModelManager } from "redux-saga-model";
 import { ConnectedRouter, routerMiddleware, routerReducer as routing } from "react-router-redux";
 import createBrowserHistory from "history/createBrowserHistory";
 import createHashHistory from "history/createHashHistory";
 import createMemoryHistory from "history/createMemoryHistory";
+import invariant from 'invariant';
 
 var RouterType = {
   Browser: "browser",
@@ -38,33 +41,32 @@ function getHistoryByType(type, props) {
 // r-redux
 function BindRouter(_ref) {
   var children = _ref.children,
-      history = _ref.history;
+      history = _ref.history,
+      sagaModel = _ref.sagaModel;
 
   return React.createElement(
     ConnectedRouter,
     { history: history },
-    children
+    typeof children === 'function' ? children(sagaModel) : children
   );
 };
 
-var needChildren = function needChildren() {
-  throw new Error('RouterControllerProvider \'children can not be null or undefined ');
-};
-
 function RouterProvider(props) {
-  var _props$children = props.children,
-      children = _props$children === undefined ? needChildren() : _props$children,
+
+  invariant(props.children, 'RouterProvider: children should be defined');
+
+  var children = props.children,
       _props$type = props.type,
       type = _props$type === undefined ? RouterType.Hash : _props$type,
-      _props$modles = props.modles,
-      modles = _props$modles === undefined ? [] : _props$modles,
+      _props$models = props.models,
+      models = _props$models === undefined ? [] : _props$models,
       _props$state = props.state,
       state = _props$state === undefined ? {} : _props$state,
       _props$reducers = props.reducers,
       reducers = _props$reducers === undefined ? {} : _props$reducers,
       _props$middleware = props.middleware,
       middleware = _props$middleware === undefined ? [] : _props$middleware,
-      ops = _objectWithoutProperties(props, ["children", "type", "modles", "state", "reducers", "middleware"]);
+      ops = _objectWithoutProperties(props, ["children", "type", "models", "state", "reducers", "middleware"]);
 
   var initialState = state;
   var initialReducer = _extends({}, reducers, {
@@ -72,25 +74,28 @@ function RouterProvider(props) {
   });
   var history = getHistoryByType(type, ops);
   var initialMiddleware = [routerMiddleware(history)].concat(_toConsumableArray(middleware));
-  var initialModles = modles;
-  var modelManager = sagaModelManagerFactory({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModles: initialModles });
+  var initialModels = models;
+  var modelManager = new SagaModelManager({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModels: initialModels, history: history });
 
   return React.createElement(
     Provider,
-    { store: modelManager.getStore() },
-    React.createElement(BindRouter, { children: children, history: history })
+    { store: modelManager.store() },
+    React.createElement(BindRouter, { children: children, history: history, sagaModel: modelManager })
   );
 };
 
 function BrowserRouterProvider(props) {
+  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == 'object', 'BrowserRouterProvider: props should be defined');
   return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Browser }));
 };
 
 function HashRouterProvider(props) {
+  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == 'object', 'HashRouterProvider: props should be defined');
   return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Hash }));
 };
 
 function MemoryRouterProvider(props) {
+  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == 'object', 'MemoryRouterProvider: props should be defined');
   return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Memory }));
 };
 
