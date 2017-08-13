@@ -137,7 +137,7 @@ ReactDOM.render(
 
 ## 详细例子
 
-[ react-router-redux-saga-model ](https://github.com/tomsonTang/react-router-redux-saga-model-example)
+[ react-router-redux-saga-mode-example ](https://github.com/tomsonTang/react-router-redux-saga-model-example)
 
 1. `npm install `
 2. `npm start`
