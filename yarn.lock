@@ -976,9 +976,9 @@ react@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-redux-saga-model@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/redux-saga-model/-/redux-saga-model-0.1.0.tgz#a4077e4c3650156eee45cdfe54670d89ec472a4e"
+redux-saga-model@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/redux-saga-model/-/redux-saga-model-0.1.1.tgz#0d8ac6514c90c11fe2e98e21d759fdd9b8d05977"
   dependencies:
     "@types/react-router" "2.x"
     "@types/react-router-redux" "^4.0.40"

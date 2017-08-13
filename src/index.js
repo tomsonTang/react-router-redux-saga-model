@@ -1,6 +1,6 @@
 import React from "react";
 import {Provider} from "react-redux";
-import {SagaModelManager} from "redux-saga-model";
+import {SagaModel} from "redux-saga-model";
 import {ConnectedRouter, routerMiddleware, routerReducer as routing} from "react-router-redux";
 import createBrowserHistory from "history/createBrowserHistory";
 import createHashHistory from "history/createHashHistory";
@@ -64,13 +64,13 @@ function RouterProvider(props) {
     routerMiddleware(history), ...middleware
   ];
   const initialModels = models;
-  const modelManager = new SagaModelManager({initialState, initialReducer, initialMiddleware, initialModels,history});
+  const sagaModel = new SagaModel({initialState, initialReducer, initialMiddleware, initialModels,history});
 
-  plugins.forEach(::modelManager.use);
+  plugins.forEach(::sagaModel.use);
 
   return (
-    <Provider store={modelManager.store()}>
-      <BindRouter children={children} history={history} sagaModel={modelManager}/>
+    <Provider store={sagaModel.store()}>
+      <BindRouter children={children} history={history} sagaModel={sagaModel}/>
     </Provider>
   );
 };

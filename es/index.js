@@ -8,7 +8,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 import React from "react";
 import { Provider } from "react-redux";
-import { SagaModelManager } from "redux-saga-model";
+import { SagaModel } from "redux-saga-model";
 import { ConnectedRouter, routerMiddleware, routerReducer as routing } from "react-router-redux";
 import createBrowserHistory from "history/createBrowserHistory";
 import createHashHistory from "history/createHashHistory";
@@ -77,14 +77,14 @@ function RouterProvider(props) {
   var history = getHistoryByType(type, ops);
   var initialMiddleware = [routerMiddleware(history)].concat(_toConsumableArray(middleware));
   var initialModels = models;
-  var modelManager = new SagaModelManager({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModels: initialModels, history: history });
+  var sagaModel = new SagaModel({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModels: initialModels, history: history });
 
-  plugins.forEach(modelManager.use.bind(modelManager));
+  plugins.forEach(sagaModel.use.bind(sagaModel));
 
   return React.createElement(
     Provider,
-    { store: modelManager.store() },
-    React.createElement(BindRouter, { children: children, history: history, sagaModel: modelManager })
+    { store: sagaModel.store() },
+    React.createElement(BindRouter, { children: children, history: history, sagaModel: sagaModel })
   );
 };
 
