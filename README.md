@@ -204,4 +204,3 @@ export default class App extends Component {
 1. `npm install `
 2. `npm start`
 
-
