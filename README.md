@@ -79,6 +79,8 @@ ReactDOM.render(
 
 ### 方式一
 
+直接作为父组件使用
+
 ```jsx
 import {BrowserRouterProvider} from 'react-router-redux-saga-model'
 import indexModel from './view/index/indexModel.js';
@@ -101,6 +103,8 @@ ReactDOM.render(
 这时候所有的 sagaModels 都会被解析并处理。
 
 ### 方式二
+
+通过传入一个回调，拿到 sagaModel 动态设置相关处理。
 
 ```jsx
 import React from 'react';
@@ -133,7 +137,65 @@ ReactDOM.render(
 );
 ```
 
-通过传入一个回调，拿到 sagaModel 动态设置相关处理。
+### 方式三
+
+将子组件进行封装且传入一个 component 字段
+
+```jsx
+//index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {BrowserRouterProvider} from 'react-router-redux-saga-model'
+import App from './view/app/app.jsx';
+import loading from './plugins/loading.js';
+
+ReactDOM.render(
+  <BrowserRouterProvider component={App} plugins={[loading]}/>,
+  document.querySelector('#root')
+);
+```
+
+```jsx
+//app.js
+import React, { Component } from 'react';
+import {Route} from 'react-router';
+import {Link} from 'react-router-dom';
+import About from '../about/index.jsx';
+import Index from '../index/index.jsx';
+import IndexModel from '../index/indexModel.js';
+
+export default class App extends Component {
+
+  componentWillMount = () => {
+    const {register,history,sagaModel} = this.props;
+	//已做与sagaModel的绑定，故可以直接调用
+    register(IndexModel);
+    
+    history.listen((location)=>{
+      console.log('location change');
+    });
+  }
+
+  componentWillUnmount() {
+    const {dump,sagaModel} = this.props;
+	//已做与sagaModel的绑定，故可以直接调用
+    dump(IndexModel.namespace);
+  }
+
+  render() {
+    return (
+      <div>
+        <Link to="/about">关于</Link>
+        <Link to="/">主页</Link>
+        <Route exact path="/" component={Index}/>
+        <Route path="/about" component={About}/>
+    </div>
+    );
+  }
+}
+```
+
+通过这种方式把相关 API 作为传入的组件的 props。
 
 ## 详细例子
 
@@ -141,4 +203,5 @@ ReactDOM.render(
 
 1. `npm install `
 2. `npm start`
+
 

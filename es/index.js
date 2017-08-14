@@ -13,7 +13,7 @@ import { ConnectedRouter, routerMiddleware, routerReducer as routing } from "rea
 import createBrowserHistory from "history/createBrowserHistory";
 import createHashHistory from "history/createHashHistory";
 import createMemoryHistory from "history/createMemoryHistory";
-import invariant from 'invariant';
+import invariant from "invariant";
 
 var RouterType = {
   Browser: "browser",
@@ -25,37 +25,65 @@ var RouterType = {
 function getHistoryByType(type, props) {
   switch (type) {
     case RouterType.Browser:
-      return createBrowserHistory({ basename: props.basename, forceRefresh: props.forceRefresh, keyLength: props.keyLength, getUserConfirmation: props.getUserConfirmation });
+      return createBrowserHistory({
+        basename: props.basename,
+        forceRefresh: props.forceRefresh,
+        keyLength: props.keyLength,
+        getUserConfirmation: props.getUserConfirmation
+      });
 
     case RouterType.Memory:
-      return createMemoryHistory({ initialEntries: props.initialEntries, initialIndex: props.initialIndex, keyLength: props.keyLength, getUserConfirmation: props.getUserConfirmation });
+      return createMemoryHistory({
+        initialEntries: props.initialEntries,
+        initialIndex: props.initialIndex,
+        keyLength: props.keyLength,
+        getUserConfirmation: props.getUserConfirmation
+      });
 
     case RouterType.Hash:
     default:
-      return createHashHistory({ basename: props.basename, hashType: props.hashType, getUserConfirmation: props.getUserConfirmation });
+      return createHashHistory({
+        basename: props.basename,
+        hashType: props.hashType,
+        getUserConfirmation: props.getUserConfirmation
+      });
   }
-};
+}
 
-// see
-// https://github.com/ReactTraining/react-router/tree/master/packages/react-route
-// r-redux
+// see https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
 function BindRouter(_ref) {
   var children = _ref.children,
-      history = _ref.history,
-      sagaModel = _ref.sagaModel;
+      sagaModel = _ref.sagaModel,
+      component = _ref.component;
+
+
+  var history = sagaModel.history();
+  var inner = void 0;
+
+  if (children) {
+    inner = typeof children === "function" ? children(sagaModel) : children;
+  } //
+  else {
+      inner = React.createElement(component, {
+        sagaModel: sagaModel,
+        history: history,
+        register: sagaModel.register.bind(sagaModel),
+        dump: sagaModel.dump.bind(sagaModel)
+      });
+    }
 
   return React.createElement(
     ConnectedRouter,
     { history: history },
-    typeof children === 'function' ? children(sagaModel) : children
+    inner
   );
-};
+}
 
 function RouterProvider(props) {
-
-  invariant(props.children, 'RouterProvider: children should be defined');
+  invariant(props.children || props.component, "RouterProvider: children or component should be defined");
 
   var children = props.children,
+      component = props.component,
       _props$type = props.type,
       type = _props$type === undefined ? RouterType.Hash : _props$type,
       _props$models = props.models,
@@ -68,7 +96,7 @@ function RouterProvider(props) {
       middleware = _props$middleware === undefined ? [] : _props$middleware,
       _props$plugins = props.plugins,
       plugins = _props$plugins === undefined ? [] : _props$plugins,
-      ops = _objectWithoutProperties(props, ["children", "type", "models", "state", "reducers", "middleware", "plugins"]);
+      ops = _objectWithoutProperties(props, ["children", "component", "type", "models", "state", "reducers", "middleware", "plugins"]);
 
   var initialState = state;
   var initialReducer = _extends({}, reducers, {
@@ -77,31 +105,37 @@ function RouterProvider(props) {
   var history = getHistoryByType(type, ops);
   var initialMiddleware = [routerMiddleware(history)].concat(_toConsumableArray(middleware));
   var initialModels = models;
-  var sagaModel = new SagaModel({ initialState: initialState, initialReducer: initialReducer, initialMiddleware: initialMiddleware, initialModels: initialModels, history: history });
+  var sagaModel = new SagaModel({
+    initialState: initialState,
+    initialReducer: initialReducer,
+    initialMiddleware: initialMiddleware,
+    initialModels: initialModels,
+    history: history
+  });
 
   plugins.forEach(sagaModel.use.bind(sagaModel));
 
   return React.createElement(
     Provider,
     { store: sagaModel.store() },
-    React.createElement(BindRouter, { children: children, history: history, sagaModel: sagaModel })
+    React.createElement(BindRouter, { children: children, sagaModel: sagaModel, component: component })
   );
-};
+}
 
 function BrowserRouterProvider(props) {
-  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == 'object', 'BrowserRouterProvider: props should be defined');
+  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == "object", "BrowserRouterProvider: props should be defined");
   return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Browser }));
-};
+}
 
 function HashRouterProvider(props) {
-  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == 'object', 'HashRouterProvider: props should be defined');
+  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == "object", "HashRouterProvider: props should be defined");
   return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Hash }));
-};
+}
 
 function MemoryRouterProvider(props) {
-  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == 'object', 'MemoryRouterProvider: props should be defined');
+  invariant(props !== null && (typeof props === "undefined" ? "undefined" : _typeof(props)) == "object", "MemoryRouterProvider: props should be defined");
   return React.createElement(RouterProvider, _extends({}, props, { type: RouterType.Memory }));
-};
+}
 
 export { RouterType, BindRouter, RouterProvider, BrowserRouterProvider, HashRouterProvider, MemoryRouterProvider };
 
