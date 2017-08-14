@@ -3,6 +3,10 @@
 
 `npm i react-router-redux-saga-model`
 
+or
+
+`yarn add react-router-redux-saga-model`
+
 很多时候我们的 `Provider` 需要手动和 store 进行关联，同时还需要手动配置 history 与 redux 的同步，以及设置响应 history 的 Router。
 
 这里将其透明化：
@@ -168,7 +172,7 @@ export default class App extends Component {
 
   componentWillMount = () => {
     const {register,history,sagaModel} = this.props;
-	//已做与sagaModel的绑定，故可以直接调用
+    //已做与sagaModel的绑定，故可以直接调用
     register(IndexModel);
     
     history.listen((location)=>{
@@ -178,7 +182,7 @@ export default class App extends Component {
 
   componentWillUnmount() {
     const {dump,sagaModel} = this.props;
-	//已做与sagaModel的绑定，故可以直接调用
+    //已做与sagaModel的绑定，故可以直接调用
     dump(IndexModel.namespace);
   }
 
