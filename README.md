@@ -168,7 +168,7 @@ export default class App extends Component {
 
   componentWillMount = () => {
     const {register,history,sagaModel} = this.props;
-	//已做与sagaModel的绑定，故可以直接调用
+    //已做与sagaModel的绑定，故可以直接调用
     register(IndexModel);
     
     history.listen((location)=>{
@@ -178,7 +178,7 @@ export default class App extends Component {
 
   componentWillUnmount() {
     const {dump,sagaModel} = this.props;
-	//已做与sagaModel的绑定，故可以直接调用
+    //已做与sagaModel的绑定，故可以直接调用
     dump(IndexModel.namespace);
   }
 
